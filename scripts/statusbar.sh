@@ -10,7 +10,7 @@ while true; do
     if [[ $BRIGHT == "0" ]]; then
         BRIGHT=""
     else
-        BRIGHT="l:$BRIGHT"
+        BRIGHT="l:$BRIGHT%"
     fi
 
     if [[ $(amixer get Master | grep 'Left:' | awk '{ print $6 }') == '[off]' ]]; then
@@ -22,7 +22,7 @@ while true; do
     fi
 
     if [[ $(acpi | awk '!/rate/' | awk '{ print $3 }') = 'Discharging,' ]]; then
-        BAT=$(acpi | awk '!/rate/' | awk '{ print $4 }' | sed 's/\,//g') 
+        BAT=$(acpi | awk '!/rate/' | awk '{ print $4"("$5")" }' | sed 's/\,//g') 
         BAT="|b:$BAT"
     fi
 
@@ -31,8 +31,12 @@ while true; do
         NET="$NET|"
     fi
 
+    CPUFREQ=$(cat /proc/cpuinfo | grep -m 1 MHz | awk '{ print $4 }' | awk 'BEGIN { FS = "." } ; { print $1 }')
+    CPUSAGE=""
+    MEMUSED=$(free -h | grep Mem | awk '{ print $3 }')
+    
 
-    STATUSSTRING="[$NET$VOL$BRIGHT$BAT] / $USER@$(hostname) \\ $(date '+%R %d.%m.%Y')"
+    STATUSSTRING="[$CPUFREQ|$MEMUSED]:[$NET$VOL$BRIGHT$BAT] / $USER@$(hostname) \\ $(date '+%R %d.%m.%Y')"
     xsetroot -name "$STATUSSTRING" -d ":0"
     sleep 0.5 
 done

@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1.5;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
@@ -13,10 +13,12 @@ static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
 static const char col_blue[]        = "#006666";
+static const char col_nix_blue[]    = "#062c37";
+static const char col_nix_red[]     = "#371106";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_blue,  col_blue  },
+	[SchemeNorm] = { col_gray3, col_gray1, col_nix_blue },
+	[SchemeSel]  = { col_gray4, col_nix_blue, col_nix_red },
 };
 
 /* tagging */
@@ -58,14 +60,14 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_blue, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_nix_blue, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "konsole", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY|ShiftMask,		XK_l, 	   spawn,	   SHCMD ("i3lock-pixeled")},
+	{ MODKEY|ShiftMask,		XK_l, 	   spawn,	   SHCMD ("i3lock-pixeled && rm -f /tmp/screen.png")},
 	{ 0,    			0x1008ff02, spawn,	   SHCMD ("light -A 10")},
 	{ 0,	        		0x1008ff03, spawn,	   SHCMD ("light -U 10")},
 	{ 0,		        	0x1008ff11, spawn,	   SHCMD ("amixer set Master 5%- unmute")},
